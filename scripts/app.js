@@ -5,6 +5,7 @@ const Router = require('koa-router')
 const session = require('koa-session')
 const config = require('../src/config')
 const app = new Koa()
+const proxy = require('http-proxy-middleware')
 
 app.keys = config.keys
 app.use(session(config.session, app))
@@ -57,6 +58,19 @@ router.get('/account/info', (ctx) => {
     } : undefined
   }
 })
+
+app.use(async (ctx, next) => {
+  if(ctx.url.startsWith('/api')) {
+      ctx.respond = false
+      return proxy({
+          target: 'http://localhost:4001', //地址
+          changeOrigin: true,
+          secure: false,
+      })(ctx.req, ctx.res, next)
+  }
+  return next()
+})
+
 
 router.get('/*', (ctx) => {
   ctx.type = 'html'

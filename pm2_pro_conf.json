@@ -1,0 +1,11 @@
+{
+    "apps": [
+      {
+        "name": "rap2-dolores",
+        "script": "pm2_pro_start.sh",
+        "watch": false,
+        "log_date_format": "YYYY-MM-DD HH:mm:ss"
+      }
+    ]
+  }
+  
